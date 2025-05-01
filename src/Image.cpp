@@ -49,8 +49,6 @@ Image::Image(const Image& other)
 // Assignment operator
 Image& Image::operator=(const Image& other) {
     if(this != &other){
-        numRows = other.numRows;
-        numCols = other.numCols;
         data = other.data;
         filePath = other.filePath;
         numChannels = other.numChannels;
@@ -126,21 +124,21 @@ Image Image::operator*(const Image& other) const { //should this be
         //fill a
         for(size_t i = 0; i < height; i++){
             for(size_t j = 0; j < width; j++){
-                A[i][j] = data[i][j * numChanels + c];
+                A[i][j] = data[i][j * numChannels + c];
             }
         }
         //fill b
         for(size_t i = 0; i < other.height; i++){
             for(size_t j = 0; j < other.width; j++){
-                B[i][j] = other.data[i][j * numChanels + c];
+                B[i][j] = other.data[i][j * numChannels + c];
             }
         }
 
         Matrix seperate = A * B; //uses the operator overloading for matrix
     
         //combine the matricies again
-    for(size_t i = 0; i < seperate.height; i++)
-        for(size_t j = 0; j < seperate.width; j++)
+    for(size_t i = 0; i < result.height; i++)
+        for(size_t j = 0; j < result.width; j++)
             result[i][j * numChannels + c] = seperate[i][j];
         
     }
