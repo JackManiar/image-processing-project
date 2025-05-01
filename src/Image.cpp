@@ -137,15 +137,13 @@ Image Image::operator*(const Image& other) const { //should this be
         }
 
         Matrix seperate = A * B; //uses the operator overloading for matrix
-    //combine the matricies again
-
+    
+        //combine the matricies again
     for(size_t i = 0; i < seperate.height; i++)
         for(size_t j = 0; j < seperate.width; j++)
             result[i][j * numChannels + c] = seperate[i][j];
         
-    return result; 
     }
-
     return result;
 }
 
