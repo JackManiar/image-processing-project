@@ -53,18 +53,6 @@ std::ostream& operator<<(std::ostream& out, const Matrix& mat) {
 }
 
 // Arithmetic operators
-/*
-Matrix Matrix::operator+(const Matrix& other) const {
-    if(numRows != other.numRows || numCols != other.numcols)
-        throw std::invalid_argument("Matrix dimensions must match (+)");
-    
-    Matrix result(numRows, numCols);
-    for(size_t i = 0; i < numRows; i++){
-        result.data[i] = data[i] + other.data[i];
-    }
-    return result;
-}
-*/
 
 //Arithmetic operator with casting like the 1st project
 Matrix Matrix::operator+(const Matrix& other) const{
@@ -80,18 +68,7 @@ Matrix Matrix::operator+(const Matrix& other) const{
     }
     return result;
 }
-/*
-Matrix Matrix::operator-(const Matrix& other) const {
-    if(numRows != other.numRows || numCols != other.numcols)
-        throw std::invalid_argument("Matrix dimensions must match (-)");
-    
-    Matrix result(numRows, numCols);
-    for(size_t i = 0; i < numRows; i++){
-        result.data[i] = data[i] - other.data[i]; 
-    }
-    return result;
-}
-*/
+
 //
 Matrix Matrix::operator-(const Matrix& other) const {
     if(numRows != other.numRows || numCols != other.numCols)

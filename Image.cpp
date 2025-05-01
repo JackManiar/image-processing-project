@@ -48,7 +48,7 @@ Image::Image(const Image& other)
 
 // Assignment operator
 Image& Image::operator=(const Image& other) {
-    if(this != other){
+    if(this != &other){
         numRows = other.numRows;
         numCols = other.numCols;
         data = other.data;
@@ -112,7 +112,41 @@ Image Image::operator-(const Image& other) const {
 
 // Multiplying two images
 Image Image::operator*(const Image& other) const { //should this be 
+    if(numChannels != other.numChannels)
+        throw std::invalid_argument("Number of channels must match (*)");
+    if(width != other.height)
+        throw std::invalid_argument("Image1 width must match Image2 height (*)");
     
+    //first split the matrix into three matrcies of each color, then use the * operator from matrix class to do the multiplication, then combine again at the end    
+    Image result("", numChannels, other.width, height);
+    for(size_t c = 0; c < numChannels; c++){
+        Matrix A(height, width); //creating the two matricies
+        Matrix B(other.height, other.width);
+
+        //fill a
+        for(size_t i = 0; i < height; i++){
+            for(size_t j = 0; j < width; j++){
+                A[i][j] = data[i][j * numChanels + c];
+            }
+        }
+        //fill b
+        for(size_t i = 0; i < other.height; i++){
+            for(size_t j = 0; j < other.width; j++){
+                B[i][j] = other.data[i][j * numChanels + c];
+            }
+        }
+
+        Matrix seperate = A * B; //uses the operator overloading for matrix
+    //combine the matricies again
+
+    for(size_t i = 0; i < seperate.height; i++)
+        for(size_t j = 0; j < seperate.width; j++)
+            result[i][j * numChannels + c] = seperate[i][j];
+        
+    return result; 
+    }
+
+    return result;
 }
 
 

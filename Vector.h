@@ -9,7 +9,7 @@
 template<typename T> 
 class Vector {
     /*currently debating on making some of these function 
-    virtual bc the instructions say to make htem virtual 
+    virtual bc the instructions say to make them virtual 
     if we think we need to but at the same time, it does 
     not seem that we are ever making a derived class*/
     protected:
@@ -22,7 +22,7 @@ class Vector {
         Vector(): data(nullptr), size(0){}
 
         //parameterized constructor
-        Vector(size_t s): size(s){
+        Vector(int s): size(s){
             if(s<0) 
                 throw std::invalid_argument("Size must be a non-negative number");
                 data = new T[size]();
@@ -73,7 +73,7 @@ class Vector {
             return out;
         }
         //input stream
-        friend std ::istream& operator>>(std::istream& in, const Vector& vector){
+        friend std ::istream& operator>>(std::istream& in,  Vector& vector){
             for(size_t i = 0; i <vector.size; i++){
                 in >> vector.data[i];
             }
@@ -113,13 +113,13 @@ class Vector {
         
         //subscript operator[]
         //const function for when x = arr[1]
-        const T& operator[](size_t index) const{
+        const T& operator[](int index) const{
             if(index < 0 || index >=size)
                 throw std::out_of_range("Index is out of range");
             return data[index];
         }
         //non const function for when arr[1] = x
-        T& operator[](size_t index) {
+        T& operator[](int index) {
             if(index >= size){
                 throw std::out_of_range("Vector index is out of bound");
             }
