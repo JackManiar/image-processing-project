@@ -170,6 +170,40 @@ void Image::save(const std::string& filePath) const {
 }
 
 void Image::resize(int newWidth, int newHeight) {
-    // YOUR CODE HERE
+    if(newWidth <= 0 || newHeight <= 0)
+        throw std::invalid_argument("Image dimensions must be positive");
+    
+    // This creates a buffer for original image and fills it with original image data.
+    std::vector<uint8_t> originalBuffer(width * height * numChannels);
+    for(size_t i = 0; i < height; i++) {
+        for(size_t j = 0; j < width * numChannels; j++) {
+            originalBuffer[i * (width * numChannels) + j] = data[i][j];
+        }
+    }
+    
+    // This makes buffer for resized image.
+    std::vector<uint8_t> resizedBuffer(newWidth * newHeight * numChannels);
+    
+    // Now stb_image_resize library used for resizing
+    int result = stbir_resize_uint8(
+        originalBuffer.data(), width, height, width * numChannels,
+        resizedBuffer.data(), newWidth, newHeight, newWidth * numChannels,
+        numChannels
+    );
+    
+    if(result == 0)
+        throw std::runtime_error("Image resize operation failed");
+    
+    // This adjusts vector<vector<uint_8>> to match resized image's dimensions.
+    data = Vector<Vector<uint8_t>>(newHeight);
+    for(size_t i = 0; i < newHeight; i++) {
+        data[i] = Vector<uint8_t>(newWidth * numChannels);
+        for(size_t j = 0; j < newWidth * numChannels; j++) {
+            data[i][j] = resizedBuffer[i * (newWidth * numChannels) + j];
+        }
+    }
+    
+    width = newWidth;
+    height = newHeight;
 }
 
