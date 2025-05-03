@@ -23,9 +23,10 @@ class Vector {
 
         //parameterized constructor
         Vector(int s): size(s){
-            if(s<0) 
+            if(s<0){ 
                 throw std::invalid_argument("Size must be a non-negative number");
-                data = new T[size]();
+            }
+            data = new T[size]();
         }
 
         //copy constructor
@@ -120,8 +121,8 @@ class Vector {
         }
         //non const function for when arr[1] = x
         T& operator[](int index) {
-            if(index >= size){
-                throw std::out_of_range("Vector index is out of bound");
+            if(index < 0 || index >= size){
+                throw std::out_of_range("Vector index " + std::to_string(index) + " out of range (size=" + std::to_string(size) + ")");
             }
             return data[index];
         }

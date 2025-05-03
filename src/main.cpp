@@ -27,9 +27,12 @@ int main(int argc, char** argv) {
 
     // Load input image 2 (if applicable)
     Image input_image_2;
+    
     if (!input_file_2.empty() && function != "scale") {
         input_image_2 = Image(input_file_2);
     }
+
+
 
     // Output image
     Image output_image;
@@ -53,6 +56,13 @@ int main(int argc, char** argv) {
         int newHeight = static_cast<int>(input_image_1.getHeight() * alpha);
         input_image_1.resize(newWidth, newHeight);
         output_image = input_image_1;
+    }
+    else if(function == "scalar"){ //included this for testing the function image*scalar value
+        float alpha = 1.0f; //default
+        if(argc > 3){
+            alpha = std::stof(input_file_2);
+        }
+        output_image = input_image_1 * alpha;
     }
     else {
         std::cout << "Invalid function name or insufficient number of arguments" << std::endl;

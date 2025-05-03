@@ -16,6 +16,12 @@ Image::Image(const std::string& filePath) {
     int width, height, channels;
     uint8_t* imageData = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
 
+   // Set the Image properties
+   this->filePath = filePath;
+   this->numChannels = channels;
+   this->width = width;
+   this->height = height;
+
     // Initialize the Matrix base class with the image data
     //keep each image row in one vector, channels laid out side by side
     //ex 2x2 image: data[0] = {R1, G1, B1, R2, G2, B2}
@@ -23,16 +29,12 @@ Image::Image(const std::string& filePath) {
     data = Vector<Vector<uint8_t>>(height);
     for(size_t i = 0; i < height; i++){
         data[i] = Vector<uint8_t>(width * numChannels);
-        for(size_t j = 0; j < width; j++){
-            data[i][j] = imageData[i* width * numChannels + j]; //this is the formula for converting the row vecotr into layers
+        for(size_t j = 0; j < width*numChannels; j++){
+            data[i][j] = imageData[i* width * numChannels + j]; //this is the formula for converting the row vector into layers
         }
     }
 
-    // Set the Image properties
-    this->filePath = filePath;
-    this->numChannels = channels;
-    this->width = width;
-    this->height = height;
+    
 
     // Free the loaded image data
     stbi_image_free(imageData);
@@ -40,7 +42,12 @@ Image::Image(const std::string& filePath) {
 
 // Constructor with file path, channels, width, and height
 Image::Image(const std::string& filePath, int numChannels, int width, int height)
-    : Matrix(height, width), filePath(filePath), numChannels(numChannels), width(width), height(height) {}
+    : Matrix(height, width*numChannels), filePath(filePath), numChannels(numChannels), width(width), height(height) {
+        data = Vector<Vector<uint8_t>>(height);
+    for (int i = 0; i < height; ++i) {
+        data[i] = Vector<uint8_t>(width * numChannels);
+    }
+    }
 
 // Copy constructor
 Image::Image(const Image& other)
@@ -85,7 +92,7 @@ Image Image::operator+(const Image& other) const {
 
     Image result("", numChannels, width, height);
     for(size_t i = 0; i < height; i++){
-        for(size_t j = 0; j < width; j++){
+        for(size_t j = 0; j < width*numChannels; j++){
             int sum = static_cast<int>(data[i][j]) + static_cast<int>(other.data[i][j]);
             result[i][j] = (sum>255) ? static_cast<uint8_t>(255) : static_cast<uint8_t>(sum);
         }
@@ -96,11 +103,11 @@ Image Image::operator+(const Image& other) const {
 // Subtracting two images
 Image Image::operator-(const Image& other) const {
     if( width != other.width || height != other.height || numChannels != other.numChannels)
-    throw std::invalid_argument("Image dimensions or number of channels do not match (+)");
+    throw std::invalid_argument("Image dimensions or number of channels do not match (-)");
 
     Image result("", numChannels, width, height);
     for(size_t i = 0; i < height; i++){
-        for(size_t j = 0; j < width; j++){
+        for(size_t j = 0; j < width*numChannels; j++){
             int diff = static_cast<int>(data[i][j]) - static_cast<int>(other.data[i][j]);
             result[i][j] = (diff < 0) ? static_cast<uint8_t>(0) : static_cast<uint8_t>(diff);
         }
