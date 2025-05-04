@@ -72,8 +72,8 @@ Image::~Image() {
 
 // Scaling an image
 Image Image::operator*(double scalar) const {
-    if(scalar < 0 || scalar > 1)
-        throw std::invalid_argument("Scale must be between 0 and 1");
+    if(scalar < 0)
+        throw std::invalid_argument("Scale must be above 0");
     
     Image result("", numChannels, width, height);
     for(size_t i = 0; i < height; i++){

@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     // Load input image 2 (if applicable)
     Image input_image_2;
     
-    if (!input_file_2.empty() && function != "scale") {
+    if (!input_file_2.empty() && function != "scale" && function != "scalar") {
         input_image_2 = Image(input_file_2);
     }
 
@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
         output_image = input_image_1;
     }
     else if(function == "scalar"){ //included this for testing the function image*scalar value
-        float alpha = 1.0f; //default
-        if(argc > 3){
+        float alpha = 1.0f;
+        if (argc > 4) {
             alpha = std::stof(input_file_2);
         }
         output_image = input_image_1 * alpha;
